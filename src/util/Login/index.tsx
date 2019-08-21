@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import jwt_decode from 'jwt-decode';
 import { Link, Redirect } from 'react-router-dom';
 import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -94,13 +95,15 @@ class Login extends Component<LoginState> {
 			.then((res) => res.json())
 			.then((json) => {
 				console.log(json);
-				localStorage.setItem('jwt', json.token);
-				this.setState({ token: json.token });
-				this.setState({ user: json.userInfo });
-				this.setState({ name: json.userInfo.name });
-				this.setState({ isLogin: true });
-				this.setState({ email: '' });
-				this.setState({ password: '' });
+				if (json.token) {
+					localStorage.setItem('jwt', json.token);
+					this.setState({ token: json.token });
+					this.setState({ user: json.userInfo });
+					this.setState({ name: json.userInfo.name });
+					this.setState({ isLogin: true });
+					// this.setState({ email: '' });
+					this.setState({ password: '' });
+				}
 			});
 	};
 
@@ -112,13 +115,23 @@ class Login extends Component<LoginState> {
 		}
 	};
 
+	componentDidMount = () => {
+		let token: any = localStorage.getItem('jwt');
+		let decode: any = jwt_decode(token);
+		console.log(decode);
+		if (token) {
+			console.log(decode.name);
+			this.setState({ isLogin: true, name: decode.name, email: decode.email });
+		}
+	};
+
 	render() {
-		const { isLogin, user, name, email, password, token } = this.state;
+		const { isLogin, name, email, password, token } = this.state;
 		return isLogin ? (
 			<Redirect
 				to={{
 					pathname: `/${name}/board`,
-					state: { user, token }
+					state: { email, token }
 				}}
 			/>
 		) : (

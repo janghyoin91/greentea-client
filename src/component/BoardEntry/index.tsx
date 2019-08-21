@@ -90,12 +90,12 @@ class BoardEntry extends Component<BoardEntryProps, BoardEntryState> {
 	}
 
 	componentDidMount = async () => {
-		const { token } = this.props.location.state;
+		const token = localStorage.getItem('jwt');
 		await fetch('http://localhost:4000/cardlist', {
 			method: 'post',
 			headers: {
 				'Content-Type': 'application/json',
-				authorization: token
+				authorization: token ? token : ''
 			},
 			body: JSON.stringify({
 				boardId: this.props.location.state.board.id
@@ -110,7 +110,7 @@ class BoardEntry extends Component<BoardEntryProps, BoardEntryState> {
 			method: 'get',
 			headers: {
 				'Content-Type': 'application/json',
-				authorization: token
+				authorization: token ? token : ''
 			}
 		})
 			.then((res) => res.json())
@@ -124,13 +124,13 @@ class BoardEntry extends Component<BoardEntryProps, BoardEntryState> {
 		destination: { droppableId: string; index: number },
 		source: { droppableId: string; index: number }
 	) => {
-		const { token } = this.props.location.state;
+		const token = localStorage.getItem('jwt');
 
 		fetch('http://localhost:4000/updateCardlist', {
 			method: 'post',
 			headers: {
 				'Content-Type': 'application/json',
-				authorization: token
+				authorization: token ? token : ''
 			},
 			body: JSON.stringify({
 				board: this.props.location.state.board,
@@ -146,13 +146,13 @@ class BoardEntry extends Component<BoardEntryProps, BoardEntryState> {
 		destination: { droppableId: number; index: number },
 		source: { droppableId: number; index: number }
 	) => {
-		const { token } = this.props.location.state;
+		const token = localStorage.getItem('jwt');
 
 		fetch('http://localhost:4000/updateCardentrylistInOneColumn', {
 			method: 'post',
 			headers: {
 				'Content-Type': 'application/json',
-				authorization: token
+				authorization: token ? token : ''
 			},
 			body: JSON.stringify({
 				destination: destination,
@@ -167,14 +167,14 @@ class BoardEntry extends Component<BoardEntryProps, BoardEntryState> {
 		destination: { droppableId: number; index: number },
 		source: { droppableId: number; index: number }
 	) => {
-		const { token } = this.props.location.state;
+		const token = localStorage.getItem('jwt');
 
 		//실패시 alert띄우기
 		fetch('http://localhost:4000/updateCardentrylistInTwoColumn', {
 			method: 'post',
 			headers: {
 				'Content-Type': 'application/json',
-				authorization: token
+				authorization: token ? token : ''
 			},
 			body: JSON.stringify({
 				destination: destination,
@@ -342,13 +342,14 @@ class BoardEntry extends Component<BoardEntryProps, BoardEntryState> {
 	};
 
 	addCard = () => {
-		const { board, token } = this.props.location.state;
+		const { board } = this.props.location.state;
+		const token = localStorage.getItem('jwt');
 
 		fetch('http://localhost:4000/addcard', {
 			method: 'post',
 			headers: {
 				'Content-type': 'application/json',
-				authorization: token
+				authorization: token ? token : ''
 			},
 			body: JSON.stringify({
 				board: board,
@@ -363,13 +364,13 @@ class BoardEntry extends Component<BoardEntryProps, BoardEntryState> {
 	};
 
 	addCardentry = (cardId: number, value: string) => {
-		const { token } = this.props.location.state;
+		const token = localStorage.getItem('jwt');
 
 		fetch('http://localhost:4000/addcardentry', {
 			method: 'post',
 			headers: {
 				'Content-type': 'application/json',
-				authorization: token
+				authorization: token ? token : ''
 			},
 			body: JSON.stringify({
 				cardId: cardId,
@@ -383,13 +384,13 @@ class BoardEntry extends Component<BoardEntryProps, BoardEntryState> {
 	};
 
 	updateCardentryTitle = (cardId: any, cardentryId: any, newtitle: string) => {
-		const { token } = this.props.location.state;
+		const token = localStorage.getItem('jwt');
 
 		fetch('http://localhost:4000/updatecardentrytitle', {
 			method: 'post',
 			headers: {
 				'Content-type': 'application/json',
-				authorization: token
+				authorization: token ? token : ''
 			},
 			body: JSON.stringify({
 				cardId: cardId,
@@ -406,13 +407,13 @@ class BoardEntry extends Component<BoardEntryProps, BoardEntryState> {
 	};
 
 	deleteCardentry = (cardId: number, cardentry: any) => {
-		const { token } = this.props.location.state;
+		const token = localStorage.getItem('jwt');
 
 		fetch('http://localhost:4000/deletecardentry', {
 			method: 'post',
 			headers: {
 				'Content-type': 'application/json',
-				authorization: token
+				authorization: token ? token : ''
 			},
 			body: JSON.stringify({
 				cardId: cardId,
@@ -424,13 +425,14 @@ class BoardEntry extends Component<BoardEntryProps, BoardEntryState> {
 	};
 
 	updateCardTitle = (cardId: number, editedtitle: string) => {
-		const { board, token } = this.props.location.state;
+		const { board } = this.props.location.state;
+		const token = localStorage.getItem('jwt');
 
 		fetch('http://localhost:4000/updatecardtitle', {
 			method: 'post',
 			headers: {
 				'Content-type': 'application/json',
-				authorization: token
+				authorization: token ? token : ''
 			},
 			body: JSON.stringify({
 				boardId: board.id,
@@ -444,12 +446,13 @@ class BoardEntry extends Component<BoardEntryProps, BoardEntryState> {
 			});
 	};
 	deleteCard = (cardId: number) => {
-		const { board, token } = this.props.location.state;
+		const token = localStorage.getItem('jwt');
+		const { board } = this.props.location.state;
 		fetch('http://localhost:4000/deletecard', {
 			method: 'post',
 			headers: {
 				'Content-type': 'application/json',
-				authorization: token
+				authorization: token ? token : ''
 			},
 			body: JSON.stringify({
 				boardId: board.id,

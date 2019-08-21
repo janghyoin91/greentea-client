@@ -83,15 +83,17 @@ class Board extends Component<BoardProps, BoardState> {
 	};
 
 	componentDidMount() {
-		const { user, token } = this.props.location.state;
-		console.log(token);
+		console.log('~~~~~~~~~~~~~~~~~~~!!~!~@~#!#');
+		const { email } = this.props.location.state;
+		const token = localStorage.getItem('jwt');
 		fetch('http://localhost:4000/boardlist', {
 			method: 'post',
 			headers: {
-				'Content-Type': 'application/json'
+				'Content-Type': 'application/json',
+				authorization: token ? token : ''
 			},
 			body: JSON.stringify({
-				user
+				email
 			})
 		})
 			.then((res) => res.json())
@@ -109,14 +111,17 @@ class Board extends Component<BoardProps, BoardState> {
 	};
 
 	addBoardentry = () => {
-		const { user } = this.props.location.state;
+		const { email } = this.props.location.state;
+		const token = localStorage.getItem('jwt');
+
 		fetch('http://localhost:4000/createboardentry', {
 			method: 'post',
 			headers: {
-				'Content-type': 'application/json'
+				'Content-type': 'application/json',
+				authorization: token ? token : ''
 			},
 			body: JSON.stringify({
-				userId: user.id,
+				email,
 				title: this.state.newboardentryTitle
 			})
 		})
@@ -127,14 +132,17 @@ class Board extends Component<BoardProps, BoardState> {
 	};
 
 	updateBoardentry = (board: any, title: string) => {
-		const { user } = this.props.location.state;
+		const { email } = this.props.location.state;
+		const token = localStorage.getItem('jwt');
+
 		fetch('http://localhost:4000/updateboardentrytitle', {
 			method: 'post',
 			headers: {
-				'Content-type': 'application/json'
+				'Content-type': 'application/json',
+				authorization: token ? token : ''
 			},
 			body: JSON.stringify({
-				userId: user.id,
+				email,
 				boardentryId: board.id,
 				title
 			})
@@ -144,14 +152,16 @@ class Board extends Component<BoardProps, BoardState> {
 	};
 
 	deleteBoardentry = (board: any) => {
-		const { user } = this.props.location.state;
+		const token = localStorage.getItem('jwt');
+		const { email } = this.props.location.state;
 		fetch('http://localhost:4000/deleteboardentry', {
 			method: 'post',
 			headers: {
-				'Content-type': 'application/json'
+				'Content-type': 'application/json',
+				authorization: token ? token : ''
 			},
 			body: JSON.stringify({
-				userId: user.id,
+				email,
 				boardentryId: board.id
 			})
 		})
