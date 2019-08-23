@@ -13,6 +13,8 @@ const Div = styled.div`
 	width: 240px;
 `;
 
+const Imsi = styled.div`height: 20px;`;
+
 const CardTitle = styled.span`cursor: pointer;`;
 
 const Addcard = styled.div`
@@ -218,15 +220,19 @@ class Card extends Component<CardProps, CardState> {
 							<Droppable droppableId={card.id} type="cardentry">
 								{(provided) => (
 									<div {...provided.droppableProps} ref={provided.innerRef}>
-										{filteredList.map((el: any, index: number) => (
-											<CardEntry
-												card={card}
-												detail={el}
-												index={index}
-												deleteCardentry={deleteCardentry}
-												updateCardentryTitle={updateCardentryTitle}
-											/>
-										))}
+										{filteredList.length !== 0 ? (
+											filteredList.map((el: any, index: number) => (
+												<CardEntry
+													card={card}
+													detail={el}
+													index={index}
+													deleteCardentry={deleteCardentry}
+													updateCardentryTitle={updateCardentryTitle}
+												/>
+											))
+										) : (
+											<Imsi />
+										)}
 										{provided.placeholder}
 									</div>
 								)}

@@ -5,6 +5,7 @@ import Header from './component/Header';
 import Board from './page/Board';
 import BoardEntry from './component/BoardEntry';
 import Login from './util/Login';
+import Signup from './util/Signup';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { fab } from '@fortawesome/free-brands-svg-icons';
 import { faSearch, faEllipsisH, faPen, faTrashAlt, faPlus, faUser, faKey } from '@fortawesome/free-solid-svg-icons';
@@ -35,6 +36,7 @@ const App: React.FC = () => {
 			<Body className="body">
 				<Switch>
 					<Route exact path="/" component={Login} />
+					<Route path="/signup" component={Signup} />
 					<Route path="/:name/board" component={Board} />
 					<Route path="/boardentry/:title" component={BoardEntry} />
 				</Switch>

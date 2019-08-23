@@ -95,6 +95,7 @@ class BoardList extends Component<BoardListProps, BoardListState> {
 	render() {
 		const { board, token, updateBoardentry, deleteBoardentry } = this.props;
 		const { edit, inputvalue } = this.state;
+		console.log('!!!!board token!!!!', token);
 		return (
 			<BoardentryLink>
 				<Link

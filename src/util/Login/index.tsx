@@ -3,6 +3,7 @@ import jwt_decode from 'jwt-decode';
 import { Link, Redirect } from 'react-router-dom';
 import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import Signup from '../Signup';
 
 const Container = styled.div`display: flex;`;
 const LoginWrapper = styled.div`
@@ -14,29 +15,35 @@ const LoginWrapper = styled.div`
 
 const Greentea = styled.div`
 	font-weight: bold;
-	font-size: 25px;
+	font-size: 33px;
 	color: #4f88f7;
 	margin-bottom: 130px;
 `;
 
+const SignupWrapper = styled.div`
+	position: relative;
+	bottom: 80px;
+	padding-right: 25%;
+`;
+
 const IdPwWrap = styled.div`margin-bottom: 10px;`;
 
-const IconWrapper = styled.span`
-	border: 1px solid black;
-	padding: 5px 0;
-`;
+const Wrapper = styled.div`margin-bottom: 10px;`;
+
+const IconWrapper = styled.span``;
 
 const Icon = styled.span`
 	color: #d9dadc;
-	width: 20px;
-	height: 20px;
 	border: 1px solid #d9dadc;
-	margin: 5px;
+	padding: 5px 7px;
 `;
 
 const Input = styled.input`
 	border: 1px solid #d9dadc;
-	padding: 3px;
+	padding: 8px 3px;
+	position: relative;
+	right: 1px;
+	bottom: 2.5px;
 `;
 
 const Btn = styled.span`
@@ -63,8 +70,9 @@ const Img = styled.img`
 `;
 interface LoginState {
 	isLogin: boolean;
-	user: any;
-	name: string;
+	isSignup: boolean;
+	userid: any;
+	username: any;
 	email: string;
 	password: string;
 	token: any;
@@ -73,8 +81,9 @@ interface LoginState {
 class Login extends Component<LoginState> {
 	state = {
 		isLogin: false,
-		user: '',
-		name: '',
+		isSignup: false,
+		userid: '',
+		username: '',
 		email: '',
 		password: '',
 		token: ''
@@ -98,13 +107,17 @@ class Login extends Component<LoginState> {
 				if (json.token) {
 					localStorage.setItem('jwt', json.token);
 					this.setState({ token: json.token });
-					this.setState({ user: json.userInfo });
-					this.setState({ name: json.userInfo.name });
+					this.setState({ userid: json.userid });
+					this.setState({ username: json.username });
 					this.setState({ isLogin: true });
-					// this.setState({ email: '' });
+					this.setState({ email: '' });
 					this.setState({ password: '' });
 				}
 			});
+	};
+
+	toggleSignup = () => {
+		this.state.isSignup ? this.setState({ isSignup: false }) : this.setState({ isSignup: true });
 	};
 
 	changeInputVal = (e: any) => {
@@ -116,21 +129,23 @@ class Login extends Component<LoginState> {
 	};
 
 	componentDidMount = () => {
-		let token: any = localStorage.getItem('jwt');
-		let decode: any = jwt_decode(token);
-		console.log(decode);
-		if (token) {
-			console.log(decode.name);
-			this.setState({ isLogin: true, name: decode.name, email: decode.email });
+		if (localStorage.getItem('jwt')) {
+			let token: any = localStorage.getItem('jwt');
+			let decode: any = jwt_decode(token);
+			console.log(decode);
+			if (token && decode) {
+				console.log(decode.name);
+				this.setState({ isLogin: true, username: decode.name, email: decode.email });
+			}
 		}
 	};
 
 	render() {
-		const { isLogin, name, email, password, token } = this.state;
+		const { isLogin, isSignup, username, email, password, token } = this.state;
 		return isLogin ? (
 			<Redirect
 				to={{
-					pathname: `/${name}/board`,
+					pathname: `/${username}/board`,
 					state: { email, token }
 				}}
 			/>
@@ -138,28 +153,36 @@ class Login extends Component<LoginState> {
 			<Container>
 				<LoginWrapper>
 					<Greentea>Greentea</Greentea>
-					<IdPwWrap>
+					{isSignup ? (
+						<SignupWrapper>
+							<Signup toggleSignup={this.toggleSignup} />
+						</SignupWrapper>
+					) : (
 						<div>
-							<IconWrapper>
-								<Icon>
-									<FontAwesomeIcon icon="user" />
-								</Icon>
-							</IconWrapper>
-							<Input value={email} name="email" onChange={this.changeInputVal} />
+							<IdPwWrap>
+								<Wrapper>
+									<IconWrapper>
+										<Icon>
+											<FontAwesomeIcon icon="user" />
+										</Icon>
+									</IconWrapper>
+									<Input value={email} name="email" onChange={this.changeInputVal} />
+								</Wrapper>
+								<Wrapper>
+									<IconWrapper>
+										<Icon>
+											<FontAwesomeIcon icon="key" />
+										</Icon>
+									</IconWrapper>
+									<Input value={password} name="pw" onChange={this.changeInputVal} />
+								</Wrapper>
+							</IdPwWrap>
+							<div>
+								<Btn onClick={this.toggleSignup}>SIGNUP</Btn>
+								<Btn onClick={this.loginHandler}>LOGIN</Btn>
+							</div>
 						</div>
-						<div>
-							<IconWrapper>
-								<Icon>
-									<FontAwesomeIcon icon="key" />
-								</Icon>
-							</IconWrapper>
-							<Input value={password} name="pw" onChange={this.changeInputVal} />
-						</div>
-					</IdPwWrap>
-					<div>
-						<Btn>SIGNIN</Btn>
-						<Btn onClick={this.loginHandler}>LOGIN</Btn>
-					</div>
+					)}
 				</LoginWrapper>
 				<ImgWrapper>
 					<Img src="http://two.corporate.themerella.com/wp-content/uploads/sites/3/2017/02/corp02-blog-08.jpg.jpg" />

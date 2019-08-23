@@ -83,7 +83,6 @@ class Board extends Component<BoardProps, BoardState> {
 	};
 
 	componentDidMount() {
-		console.log('~~~~~~~~~~~~~~~~~~~!!~!~@~#!#');
 		const { email } = this.props.location.state;
 		const token = localStorage.getItem('jwt');
 		fetch('http://localhost:4000/boardlist', {
@@ -170,8 +169,9 @@ class Board extends Component<BoardProps, BoardState> {
 	};
 
 	render() {
-		const { token } = this.props.location.state;
 		const { boardlist, modal, newboardentryTitle } = this.state;
+		const token = localStorage.getItem('jwt');
+
 		return (
 			<BoardWrpper>
 				<BoardlistWrapper className="boardList">
