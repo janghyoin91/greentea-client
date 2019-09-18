@@ -1,73 +1,23 @@
 import React, { Component } from 'react';
 import jwt_decode from 'jwt-decode';
-import { Link, Redirect } from 'react-router-dom';
-import styled from 'styled-components';
+import { Redirect } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Signup from '../Signup';
+import {
+	Container,
+	LoginWrapper,
+	Greentea,
+	SignupWrapper,
+	IdPwWrap,
+	Wrapper,
+	IconWrapper,
+	Icon,
+	Input,
+	Btn,
+	ImgWrapper,
+	Img
+} from './styled';
 
-const Container = styled.div`display: flex;`;
-const LoginWrapper = styled.div`
-	width: 25%;
-	height: 578px;
-	background-color: #fff;
-	padding: 5% 5%;
-`;
-
-const Greentea = styled.div`
-	font-weight: bold;
-	font-size: 33px;
-	color: #4f88f7;
-	margin-bottom: 130px;
-`;
-
-const SignupWrapper = styled.div`
-	position: relative;
-	bottom: 80px;
-	padding-right: 25%;
-`;
-
-const IdPwWrap = styled.div`margin-bottom: 10px;`;
-
-const Wrapper = styled.div`margin-bottom: 10px;`;
-
-const IconWrapper = styled.span``;
-
-const Icon = styled.span`
-	color: #d9dadc;
-	border: 1px solid #d9dadc;
-	padding: 5px 7px;
-`;
-
-const Input = styled.input`
-	border: 1px solid #d9dadc;
-	padding: 8px 3px;
-	position: relative;
-	right: 1px;
-	bottom: 2.5px;
-`;
-
-const Btn = styled.span`
-	background-color: #4f88f7;
-	border: none;
-	color: #fff;
-	cursor: pointer;
-	margin: 8px 8px 0 0;
-	padding: 9px 24px;
-	text-align: center;
-	border-radius: 3px;
-	font-size: 14px;
-`;
-
-const ImgWrapper = styled.div`
-	width: 75%;
-	height: 578px;
-`;
-
-const Img = styled.img`
-	position: relative;
-	height: 100%;
-	width: 100%;
-`;
 interface LoginState {
 	isLogin: boolean;
 	isSignup: boolean;
@@ -91,7 +41,7 @@ class Login extends Component<LoginState> {
 
 	loginHandler = () => {
 		const { email, password } = this.state;
-		fetch('http://localhost:4000/login', {
+		fetch('http://ec2-52-78-41-28.ap-northeast-2.compute.amazonaws.com:4000/user/login', {
 			method: 'post',
 			headers: {
 				'Content-type': 'application/json'
@@ -103,7 +53,6 @@ class Login extends Component<LoginState> {
 		})
 			.then((res) => res.json())
 			.then((json) => {
-				console.log(json);
 				if (json.token) {
 					localStorage.setItem('jwt', json.token);
 					this.setState({ token: json.token });
@@ -132,9 +81,7 @@ class Login extends Component<LoginState> {
 		if (localStorage.getItem('jwt')) {
 			let token: any = localStorage.getItem('jwt');
 			let decode: any = jwt_decode(token);
-			console.log(decode);
 			if (token && decode) {
-				console.log(decode.name);
 				this.setState({ isLogin: true, username: decode.name, email: decode.email });
 			}
 		}
@@ -142,6 +89,7 @@ class Login extends Component<LoginState> {
 
 	render() {
 		const { isLogin, isSignup, username, email, password, token } = this.state;
+
 		return isLogin ? (
 			<Redirect
 				to={{

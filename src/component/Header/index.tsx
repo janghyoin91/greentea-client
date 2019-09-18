@@ -1,99 +1,23 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import styled from 'styled-components';
 import jwt_decode from 'jwt-decode';
+import {
+	Div,
+	First,
+	Second,
+	Third,
+	Button,
+	Trello,
+	SearchDiv,
+	SearchInput,
+	SearchIcon,
+	Boards,
+	Logout,
+	LogoutItem,
+	RemoveAcc
+} from './styled';
 
-const Div = styled.div`
-	display: flex;
-	padding: 20px;
-	box-shadow: 0 1px 20px -10px rgba(32, 33, 36, .28);
-`;
-
-const First = styled.div`
-	display: flex;
-	justify-content: flex-start;
-	flex-grow: 1;
-`;
-
-const Second = styled.div`
-	@import url('https://fonts.gotogleapis.com/css?family=Megrim|Sriracha|Yellowtail&display=swap');
-	font-family: Yellowtail;
-	font-weight: bold;
-	font-size: 25px;
-	color: #4f88f7;
-	display: block;
-	left: 50%;
-	position: absolute;
-`;
-
-const Third = styled.div`
-	display: flex;
-	justify-content: flex-end;
-	flex-grow: 1;
-	color: #abafb2;
-`;
-
-const Button = styled.button`
-	border: none;
-	background-color: white;
-`;
-
-const Trello = styled.span`
-	color: #d9dadc;
-	font-size: 22px;
-`;
-
-const SearchDiv = styled.div`
-	position: relative;
-	left: 90px;
-`;
-
-const SearchInput = styled.input.attrs({
-	placeholder: 'Search...'
-})`
-	position: relative;
-	top: 3px; 
-	left: 10px;
-	border: none;
-	::placeholder{
-		font-style: italic;
-		color: #D9DADC;
-	}
-`;
-
-const SarchIcon = styled.span`
-	position: relative;
-	top: 3px;
-	color: #d9dadc;
-	font-size: 14px;
-`;
-
-const Boards = styled.span`
-	position: relative;
-	bottom: 2px;
-	left: 10px;
-	color: #abafb2;
-	cursor: pointer;
-`;
-
-const Logout = styled.div`
-	position: fixed;
-	top: 57px;
-	right: 10px;
-	padding: 15px;
-	background-color: #fff;
-	box-shadow: 0 1px 20px -10px rgba(32, 33, 36, .28);
-`;
-
-const LogoutItem = styled.div`
-	margin-bottom: 10px;
-	padding-bottom: 10px;
-	border-bottom: 0.5px solid #d9dadc;
-	cursor: pointer;
-`;
-
-const RemoveAcc = styled.div`cursor: pointer;`;
 interface HeaderProps {
 	location: any;
 	match: any;
@@ -101,10 +25,12 @@ interface HeaderProps {
 
 interface HeaderState {
 	logout: boolean;
+	jwt: string;
 }
 class Header extends Component<HeaderState> {
 	state = {
-		logout: false
+		logout: false,
+		jwt: ''
 	};
 
 	toggleLogout = () => {
@@ -118,8 +44,8 @@ class Header extends Component<HeaderState> {
 	removeAccountHandler = () => {
 		const token: any = localStorage.getItem('jwt');
 		let decode: any = jwt_decode(token);
-
-		fetch('http://localhost:4000/removeaccount', {
+		localStorage.removeItem('jwt');
+		fetch('http://ec2-52-78-41-28.ap-northeast-2.compute.amazonaws.com:4000/user/deleteaccount', {
 			method: 'post',
 			headers: {
 				'Content-type': 'application/json',
@@ -151,9 +77,9 @@ class Header extends Component<HeaderState> {
 						</Button>
 					</Link>
 					<SearchDiv>
-						<SarchIcon>
+						<SearchIcon>
 							<FontAwesomeIcon icon="search" />
-						</SarchIcon>
+						</SearchIcon>
 						<SearchInput />
 					</SearchDiv>
 				</First>
@@ -177,7 +103,9 @@ class Header extends Component<HeaderState> {
 							<Link to="/">
 								<LogoutItem onClick={this.logoutHandler}>Log Out</LogoutItem>
 							</Link>
-							<RemoveAcc onClick={this.removeAccountHandler}>Remove Account</RemoveAcc>
+							<Link to="/">
+								<RemoveAcc onClick={this.removeAccountHandler}>Remove Account</RemoveAcc>
+							</Link>
 						</div>
 					</Logout>
 				) : null}

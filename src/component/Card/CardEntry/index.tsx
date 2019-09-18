@@ -1,52 +1,7 @@
 import React, { Component } from 'react';
-import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Draggable } from 'react-beautiful-dnd';
-
-const Div = styled.div`
-	justify-content: flex-start;
-	cursor: pointer;
-	flex-grow: 8;
-`;
-const Wrapper = styled.div`
-	display: flex;
-	border: 1px solid #d9dadc;
-	padding: 10px;
-	margin-bottom: 12px;
-`;
-
-const Btns = styled.div`
-	font-size: 12px;
-	color: #c9cdd0;
-	cursor: pointer;
-`;
-const EditcardentryWrapper = styled.div`display: flex;`;
-const Input = styled.input`
-	width: 240px;
-	padding: 5px 3px;
-	font-size: 16px;
-`;
-
-const Xbtn = styled.span`
-	color: #b7b8bc;
-	position: relative;
-	right: 10px;
-	top: 3px;
-	cursor: pointer;
-`;
-const Pen = styled.span`
-	position: relative;
-	right: 10px;
-	:hover {
-		color: #4f88f7;
-	}
-`;
-const Trash = styled.span`
-	:hover {
-		color: #4f88f7;
-	}
-`;
-
+import { Div, Wrapper, Btns, EditcardentryWrapper, Input, Xbtn, Pen, Trash } from './styled';
 interface CardEntryProps {
 	card: any;
 	detail: any;
@@ -97,7 +52,7 @@ class CardEntry extends Component<CardEntryProps, CardEntryState> {
 	};
 
 	render() {
-		const { card, detail, index, deleteCardentry, updateCardentryTitle } = this.props;
+		const { card, detail, index, deleteCardentry } = this.props;
 		const { editcardentry, editedtitle } = this.state;
 
 		return (

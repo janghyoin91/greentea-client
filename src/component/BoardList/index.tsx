@@ -1,66 +1,7 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-
-const BoardentryLink = styled.div`
-	padding: 10px;
-	background-color: white;
-	box-shadow: 1px 1px 20px -10px rgba(32, 33, 36, .28);
-	color: #b7b8bc;
-	margin-right: 20px;
-	width: 200px;
-	height: 104px;
-	border-radius: 3px;
-`;
-const TitleWrapper = styled.div`
-	display: flex;
-	color: #d9dadc;
-`;
-const Circle = styled.span`
-	color: #d9dadc;
-	fornt-weight: bold;
-	margin-right: 8px;
-`;
-
-const Title = styled.div`
-	font-weight: bold;
-	text-decoration: none;
-	margin-bottom: 68px;
-	:hover {
-		color: #4f88f7;
-	}
-`;
-
-const TitleEdit = styled.input`
-	margin-bottom: 68px;
-	position: relative;
-	top: 3px;
-`;
-
-const EditClose = styled.div`
-	float: right;
-	cursor: pointer;
-`;
-const Icons = styled.div`
-	float: right;
-	font-size: 13px;
-`;
-
-const Pen = styled.span`
-	position: relative;
-	right: 10px;
-	cursor: pointer;
-	:hover {
-		color: #4f88f7;
-	}
-`;
-const Trash = styled.span`
-	cursor: pointer;
-	:hover {
-		color: #4f88f7;
-	}
-`;
+import { BoardentryLink, TitleWrapper, Circle, Title, TitleEdit, EditClose, Icons, Pen, Trash } from './styled';
 
 interface BoardListProps {
 	board: any;
@@ -95,7 +36,6 @@ class BoardList extends Component<BoardListProps, BoardListState> {
 	render() {
 		const { board, token, updateBoardentry, deleteBoardentry } = this.props;
 		const { edit, inputvalue } = this.state;
-		console.log('!!!!board token!!!!', token);
 		return (
 			<BoardentryLink>
 				<Link

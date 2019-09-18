@@ -1,69 +1,7 @@
 import React, { Component } from 'react';
-import styled from 'styled-components';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { DragDropContext, Droppable } from 'react-beautiful-dnd';
 import Card from '../Card';
-
-const Div = styled.div`padding: 20px 40px;`;
-
-const CardFlex = styled.div`display: flex;`;
-
-const BoardTitle = styled.div`
-	font-size: 20px;
-	margin-bottom: 20px;
-`;
-
-const AddlistBtn = styled.span`
-	position: absolute;
-	right: 50px;
-	bottom: 30px;
-	background-color: #4f88f7;
-	box-shadow: 1px 1px 10px 0px #4f88f7;
-	width: 40px;
-	height: 40px;
-	border-radius: 20px;
-	cursor: pointer;
-`;
-
-const Plus = styled.span`
-	position: relative;
-	top: 5px;
-	left: 13px;
-	color: #fff;
-	text-align: center;
-	font-size: 20px;
-`;
-
-const AddlistInput = styled.input`
-	margin-bottom: 10px;
-	width: 230px;
-	padding: 5px 3px;
-`;
-
-const CloseAddlist = styled.span`
-	font-size: 20px;
-	font-weight: bold;
-	color: #b7b8bc;
-	cursor: pointer;
-`;
-const Createlist = styled.span`
-	background-color: #4f88f7;
-	border: none;
-	color: #fff;
-	cursor: pointer;
-	margin: 8px 8px 0 0;
-	padding: 6px 12px;
-	text-align: center;
-	border-radius: 3px;
-	font-size: 14px;
-`;
-
-const Modal = styled.div`
-	background: #dbd8d825;
-	width: 240px;
-	height: 70px;
-	padding: 6px;
-`;
+import { Div, CardFlex, BoardTitle, AddlistBtn, Plus, AddlistInput, CloseAddlist, Createlist, Modal } from './styled';
 
 interface BoardEntryProps {
 	location: any;
@@ -91,7 +29,7 @@ class BoardEntry extends Component<BoardEntryProps, BoardEntryState> {
 
 	componentDidMount = async () => {
 		const token = localStorage.getItem('jwt');
-		await fetch('http://localhost:4000/cardlist', {
+		await fetch('http://ec2-52-78-41-28.ap-northeast-2.compute.amazonaws.com:4000/card/cardlist', {
 			method: 'post',
 			headers: {
 				'Content-Type': 'application/json',
@@ -106,7 +44,7 @@ class BoardEntry extends Component<BoardEntryProps, BoardEntryState> {
 				this.setState({ cardlist: json.sort(this.compare) });
 			});
 
-		await fetch('http://localhost:4000/cardentrylist', {
+		await fetch('http://ec2-52-78-41-28.ap-northeast-2.compute.amazonaws.com:4000/cardentry/cardentrylist', {
 			method: 'get',
 			headers: {
 				'Content-Type': 'application/json',
@@ -126,7 +64,7 @@ class BoardEntry extends Component<BoardEntryProps, BoardEntryState> {
 	) => {
 		const token = localStorage.getItem('jwt');
 
-		fetch('http://localhost:4000/updateCardlist', {
+		fetch('http://ec2-52-78-41-28.ap-northeast-2.compute.amazonaws.com:4000/card/updateCardlist', {
 			method: 'post',
 			headers: {
 				'Content-Type': 'application/json',
@@ -148,7 +86,7 @@ class BoardEntry extends Component<BoardEntryProps, BoardEntryState> {
 	) => {
 		const token = localStorage.getItem('jwt');
 
-		fetch('http://localhost:4000/updateCardentrylistInOneColumn', {
+		fetch('http://ec2-52-78-41-28.ap-northeast-2.compute.amazonaws.com:4000/cardentry/updateCardentrylistInOneColumn', {
 			method: 'post',
 			headers: {
 				'Content-Type': 'application/json',
@@ -170,7 +108,7 @@ class BoardEntry extends Component<BoardEntryProps, BoardEntryState> {
 		const token = localStorage.getItem('jwt');
 
 		//실패시 alert띄우기
-		fetch('http://localhost:4000/updateCardentrylistInTwoColumn', {
+		fetch('http://ec2-52-78-41-28.ap-northeast-2.compute.amazonaws.com:4000/cardentry/updateCardentrylistInTwoColumn', {
 			method: 'post',
 			headers: {
 				'Content-Type': 'application/json',
@@ -304,9 +242,7 @@ class BoardEntry extends Component<BoardEntryProps, BoardEntryState> {
 	};
 
 	onDragEnd = (result: any) => {
-		console.log(result);
 		const { draggableId, destination, source, type } = result;
-		console.log(typeof draggableId);
 		if (!destination) {
 			return;
 		}
@@ -338,14 +274,13 @@ class BoardEntry extends Component<BoardEntryProps, BoardEntryState> {
 
 	changeNewcardTitle = (e: React.ChangeEvent<HTMLInputElement>) => {
 		this.setState({ newcardtitle: e.target.value });
-		console.log(this.state.newcardtitle);
 	};
 
 	addCard = () => {
 		const { board } = this.props.location.state;
 		const token = localStorage.getItem('jwt');
 
-		fetch('http://localhost:4000/addcard', {
+		fetch('http://ec2-52-78-41-28.ap-northeast-2.compute.amazonaws.com:4000/card/addcard', {
 			method: 'post',
 			headers: {
 				'Content-type': 'application/json',
@@ -366,7 +301,7 @@ class BoardEntry extends Component<BoardEntryProps, BoardEntryState> {
 	addCardentry = (cardId: number, value: string) => {
 		const token = localStorage.getItem('jwt');
 
-		fetch('http://localhost:4000/addcardentry', {
+		fetch('http://ec2-52-78-41-28.ap-northeast-2.compute.amazonaws.com:4000/cardentry/addcardentry', {
 			method: 'post',
 			headers: {
 				'Content-type': 'application/json',
@@ -386,7 +321,7 @@ class BoardEntry extends Component<BoardEntryProps, BoardEntryState> {
 	updateCardentryTitle = (cardId: any, cardentryId: any, newtitle: string) => {
 		const token = localStorage.getItem('jwt');
 
-		fetch('http://localhost:4000/updatecardentrytitle', {
+		fetch('http://ec2-52-78-41-28.ap-northeast-2.compute.amazonaws.com:4000/cardentry/updatecardentrytitle', {
 			method: 'post',
 			headers: {
 				'Content-type': 'application/json',
@@ -400,8 +335,6 @@ class BoardEntry extends Component<BoardEntryProps, BoardEntryState> {
 		})
 			.then((res) => res.json())
 			.then((json) => {
-				console.log('모햐모햐~!');
-				console.log(json);
 				this.setState({ cardentrylist: json });
 			});
 	};
@@ -409,7 +342,7 @@ class BoardEntry extends Component<BoardEntryProps, BoardEntryState> {
 	deleteCardentry = (cardId: number, cardentry: any) => {
 		const token = localStorage.getItem('jwt');
 
-		fetch('http://localhost:4000/deletecardentry', {
+		fetch('http://ec2-52-78-41-28.ap-northeast-2.compute.amazonaws.com:4000/cardentry/deletecardentry', {
 			method: 'post',
 			headers: {
 				'Content-type': 'application/json',
@@ -428,7 +361,7 @@ class BoardEntry extends Component<BoardEntryProps, BoardEntryState> {
 		const { board } = this.props.location.state;
 		const token = localStorage.getItem('jwt');
 
-		fetch('http://localhost:4000/updatecardtitle', {
+		fetch('http://ec2-52-78-41-28.ap-northeast-2.compute.amazonaws.com:4000/card/updatecardtitle', {
 			method: 'post',
 			headers: {
 				'Content-type': 'application/json',
@@ -448,7 +381,7 @@ class BoardEntry extends Component<BoardEntryProps, BoardEntryState> {
 	deleteCard = (cardId: number) => {
 		const token = localStorage.getItem('jwt');
 		const { board } = this.props.location.state;
-		fetch('http://localhost:4000/deletecard', {
+		fetch('http://ec2-52-78-41-28.ap-northeast-2.compute.amazonaws.com:4000/card/deletecard', {
 			method: 'post',
 			headers: {
 				'Content-type': 'application/json',
@@ -469,8 +402,7 @@ class BoardEntry extends Component<BoardEntryProps, BoardEntryState> {
 	};
 
 	render() {
-		const { board, token } = this.props.location.state;
-		console.log('!board!!!!', board);
+		const { board } = this.props.location.state;
 		const { cardlist, cardentrylist, addlistBtn } = this.state;
 
 		return (
